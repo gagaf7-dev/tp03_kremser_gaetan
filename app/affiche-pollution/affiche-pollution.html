@@ -1,0 +1,12 @@
+<h2>Liste des pollutions</h2>
+<div *ngIf="loading">Chargement...</div>
+<div *ngIf="error">{{ error }}</div>
+<ul *ngIf="!loading && !error">
+  <li *ngFor="let p of pollutions">
+    <strong>{{ p.titre || 'Sans titre' }}</strong> — {{ p.type || 'Type inconnu' }} — {{ p.lieu || 'Lieu inconnu' }} ({{ p.dateObservation || 'Date inconnue' }})
+    <div *ngIf="p.description">{{ p.description }}</div>
+    <img *ngIf="p.photoUrl" [src]="p.photoUrl" alt="photo" style="max-width:200px;max-height:120px;margin:8px 0;">
+  </li>
+</ul>
+<div *ngIf="!loading && !error && pollutions.length === 0">Aucune pollution trouvée.</div>
+
