@@ -21,6 +21,10 @@ export class InterfaceAPI {
 
   // Read - list
   getPollutions(): Observable<Pollution[]> {
+    if (environment.useMock) {
+      return this.http.get<Pollution[]>('/assets/mock-users.json')
+        .pipe(catchError(this.handleError));
+    }
     return this.http.get<Pollution[]>(this.baseUrl)
       .pipe(catchError(this.handleError));
   }

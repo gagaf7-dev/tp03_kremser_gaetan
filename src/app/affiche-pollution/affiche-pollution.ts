@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { InterfaceAPI } from '../interface-api';
 import { Pollution } from '../model/pollution.model';
+import { inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import{ HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-affiche-pollution',
@@ -8,15 +11,22 @@ import { Pollution } from '../model/pollution.model';
   styleUrls: ['./affiche-pollution.css']
 })
 export class AffichePollution implements OnInit {
+  
+  public readonly interfaceAPI = inject(InterfaceAPI);
   pollutions: Pollution[] = [];
   loading = true;
   error: string | null = null;
 
-  constructor(private api: InterfaceAPI) {}
+
+
+  trackByTitre(index: number, pollution: Pollution) {
+  return pollution.titre + (pollution.dateObservation ?? '') + (pollution.lieu ?? '') + index;
+}
 
   ngOnInit(): void {
-    this.api.getPollutions().subscribe({
+    this.interfaceAPI.getPollutions().subscribe({
       next: (data) => {
+        console.log('Pollutions reçues:', data);
         this.pollutions = data;
         this.loading = false;
       },

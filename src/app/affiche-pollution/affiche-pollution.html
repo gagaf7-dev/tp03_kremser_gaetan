@@ -1,12 +1,42 @@
-<h2>Liste des pollutions</h2>
-<div *ngIf="loading">Chargement...</div>
-<div *ngIf="error">{{ error }}</div>
-<ul *ngIf="!loading && !error">
-  <li *ngFor="let p of pollutions">
-    <strong>{{ p.titre || 'Sans titre' }}</strong> — {{ p.type || 'Type inconnu' }} — {{ p.lieu || 'Lieu inconnu' }} ({{ p.dateObservation || 'Date inconnue' }})
-    <div *ngIf="p.description">{{ p.description }}</div>
-    <img *ngIf="p.photoUrl" [src]="p.photoUrl" alt="photo" style="max-width:200px;max-height:120px;margin:8px 0;">
-  </li>
-</ul>
-<div *ngIf="!loading && !error && pollutions.length === 0">Aucune pollution trouvée.</div>
+<div class="accueil-header">
+  <h1>Bienvenue sur Captain Miasm</h1>
+  <p>Découvrez les signalements de pollution autour de vous.</p>
+</div>
+<div class="pollution-list">
+  @if (loading) {
+    <div>Chargement...</div>
+  }
+  @if (error) {
+    <div>{{ error }}</div>
+  }
+  @if (!loading && !error && pollutions.length === 0) {
+    <div>Aucune pollution trouvée.</div>
+  }
+  @for (pollution of pollutions; track pollutions) {
+    <div class="pollution-card">
+      @if (pollution.photoUrl) {
+        <img [src]="pollution.photoUrl" alt="Photo pollution" class="pollution-photo"/>
+      }
+      <div class="pollution-info">
+        <h2>{{ pollution.titre || 'Sans titre' }}</h2>
+        <p><strong>Type :</strong> {{ pollution.type || 'Inconnu' }}</p>
+        @if (pollution.description) {
+          <p><strong>Description :</strong> {{ pollution.description }}</p>
+        }
+        @if (pollution.dateObservation) {
+          <p><strong>Date :</strong> {{ pollution.dateObservation }}</p>
+        }
+        @if (pollution.lieu) {
+          <p><strong>Lieu :</strong> {{ pollution.lieu }}</p>
+        }
+        @if (pollution.latitude !== undefined && pollution.longitude !== undefined) {
+          <p>
+            <strong>Latitude :</strong> {{ pollution.latitude }} |
+            <strong>Longitude :</strong> {{ pollution.longitude }}
+          </p>
+        }
+      </div>
+    </div>
+  }
+</div>
 
